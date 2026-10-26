@@ -25,6 +25,9 @@ export interface TokenScope {
  *  props and reads/writes it here. Deliberately generic: it knows nothing about any control family. */
 export interface ControlDataScope {
   request(path: string, init?: { method?: string; body?: unknown }): Promise<ControlDataResponse>;
+  /** "Your data moved": the page's Undo or Redo rolled back (or re-applied) what you staged in its unit
+   *  of work on the server. Re-read what you show. Answers the unsubscribe; absent on a host with no page. */
+  onChanged?(listener: () => void): () => void;
 }
 
 export interface ControlDataResponse {
@@ -59,6 +62,11 @@ export interface StyleScope<K extends string> {
 export interface ControlHandle<P> {
   update(props: P): void;
   destroy(): void;
+  /** Optional — for a control whose start CONTINUES after `mount` returns (a document to fetch, a chunk to
+   *  load). Resolve it when the control is running; REJECT it when it is not. The platform marks a rejected
+   *  control `failed`, so a test's probe answers "never started" with the reason instead of reading a control
+   *  that is only pixels. Omit it when `mount` is the whole start. */
+  ready?: Promise<void>;
 }
 
 /** The props `PdfThumbnail` receives, as the platform marshals them. */
@@ -81,6 +89,12 @@ export interface PdfThumbnailHost {
    *  every layer. */
   emit(event: "loaded", pageCount: number): void;
   emit(event: "failed", reason: string): void;
+
+  /** ONE user act: every event raised inside `act`, and until the promise it answers settles, is ONE undo
+   *  step on the page, named `label`. Events raised in one synchronous turn are one step already; this is
+   *  for a gesture that spans turns (a drag that emits as it goes). Optional, so on an older host:
+   *  `if (host.batch) host.batch(label, act); else act();` */
+  batch?(label: string, act: () => void | Promise<unknown>): void;
 
   /** The app's design tokens — this control is `headless`, so it renders through the app's theme. */
   tokens: TokenScope;

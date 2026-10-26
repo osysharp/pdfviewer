@@ -19,19 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Third-party components
-----------------------
-
-This kit's `.osy` source is covered by the licence above. The vendored PDF
-rendering bundle and its fonts are NOT, and remain under their own terms. Their
-licence texts ship with the kit in `licenses/`:
-
-  PDF.js (Mozilla)    Apache-2.0      LICENSE_PDFJS_*
-  Foxit               see             LICENSE_FOXIT
-  OpenJPEG            BSD-2-Clause    LICENSE_OPENJPEG
-  JBIG2               see             LICENSE_JBIG2
-  QCMS                MIT             LICENSE_QCMS
-  Liberation fonts    SIL OFL 1.1     LICENSE_LIBERATION
